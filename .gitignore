@@ -13,3 +13,5 @@ dist/
 coverage/
 *.log
 .dkim-cache/
+backend/.local-deployment.json
+backend/.merchant-registry.json

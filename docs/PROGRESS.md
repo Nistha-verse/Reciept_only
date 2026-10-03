@@ -42,6 +42,23 @@
 - First SDK typecheck reported `TS2322` on `Object.fromEntries` returning unknown
   cache values. The cache's validated entries now receive an explicit Cache type.
 
+### Phase 4 evidence
+
+- Artifact-generated SDK ABI, viem clients, simulation + 20% gas margin, single
+  send, bounded receipt wait, all custom-error mappings, paginated reader, cache,
+  local merchant registry, and explicit salted demo mode implemented.
+- `npm run test:sdk`: **32 passed, one skipped** after fixing a real integration
+  failure (`expected 1 to be 2`): viem cached the latest block height after a
+  second confirmed post. Reader now requests `cacheTime: 0` for block height.
+- Typecheck initially hit viem inferred-declaration/OP-chain union incompatibility
+  (`TS2742`, then `TS2719`). Explicit standard `Chain` and client return types
+  resolved it. SDK typecheck now passes.
+- Local Hardhat integration used the .env account funded only inside the test
+  node; default Hardhat private keys were never printed. Deployment, post,
+  readback, replay rejection, demo-salted reuse and view-backed average all passed.
+- Mocked range-shrinking/deduplication/smoke filtering and every custom error
+  selector passed. Separate send-uncertainty tests are included for the next run.
+
 **Status: resumed; Phase 0 environment check passed. Implementation in progress.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.
