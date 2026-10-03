@@ -50,4 +50,5 @@ The scaffold does not run Solidity tests yet because Phase 0 contains no contrac
 - Blocking evidence: official `conductor.zk.email` blueprint lookup returned HTTP 500 (`{"error":"Internal server error"}`) for the documented residency slug and the documented Luma blueprint; no circuit assets or verifier metadata were available.
 - No browser runtime is installed in WSL, so the SDK's browser Worker/WASM local prover could not be executed after the registry failure.
 - No official Zomato blueprint was found. The exact Zomato signal layout and verifier inputs remain unknown and must not be guessed.
+- Retry evidence: `foundryup` again timed out downloading `foundry_v1.8.4_linux_amd64.tar.gz`; both official blueprint API URLs again returned HTTP 500.
 - Full details: [`docs/ZKEMAIL_NOTES.md`](ZKEMAIL_NOTES.md).

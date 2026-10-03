@@ -100,4 +100,4 @@ No official Zomato blueprint was identified in the checked official docs, SDK de
 
 ## Decision
 
-Phase 1 cannot meet its required DONE condition yet: the official sample was obtained, but the official registry returned HTTP 500 and no browser runtime is available for local proving. No contract signal indices or Zomato blueprint details will be invented. Resume with a working Registry/Conductor service and a browser-capable local proving environment before implementing contracts.
+Phase 1 cannot meet its required DONE condition yet: the official sample was obtained, but the official registry returned HTTP 500 and no browser runtime is available for local proving. A retry on 2026-10-03 returned HTTP 500 for both the documented residency slug and documented Luma blueprint ID. No contract signal indices or Zomato blueprint details will be invented. Resume with a working Registry/Conductor service and a browser-capable local proving environment before implementing contracts.
