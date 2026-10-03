@@ -72,6 +72,19 @@
   No real email content was displayed. Inbox sender metadata is domain-only;
   subjects are returned only by the explicit local inbox interface.
 
+### Phase 6 evidence
+
+- Fastify injection tests: **8 passed**. Real synthetic DKIM verification runs
+  inside requests; only the chain send is mocked in API unit tests (real chain
+  integration is separately covered by SDK/CLI tests).
+- Tested startup refusal, non-loopback peers, foreign origins, DNS-rebinding Host
+  headers, preflight headers, input schemas, body limit, rate limiting, replay
+  status, safe errors, and verify-before-send ordering.
+- Initial API typecheck found that dotenv's spread lost the environment index
+  signature; added an explicit return type. Typecheck and backend lint now pass.
+- Removed deprecated Fastify `disableRequestLogging` option after its warning;
+  `logger: false` disables logging entirely, including bodies and request lines.
+
 **Status: resumed; Phase 0 environment check passed. Implementation in progress.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.

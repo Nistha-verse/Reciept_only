@@ -24,7 +24,10 @@ function root() {
   throw new ReceiptsError("ENV_INVALID");
 }
 export const ROOT = root();
-export function loadEnv() {
+export function loadEnv(): Record<string, string> & {
+  privateKey: `0x${string}`;
+  rpcUrl: string;
+} {
   try {
     const values = parse(readFileSync(join(ROOT, ".env")));
     const raw = values.DEPLOYER_PRIVATE_KEY?.trim() ?? "";
