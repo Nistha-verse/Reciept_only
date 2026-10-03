@@ -1,0 +1,16 @@
+{
+  "name": "receipts-only",
+  "private": true,
+  "type": "module",
+  "workspaces": ["backend/sdk", "backend/cli"],
+  "scripts": {
+    "check:secrets": "tsx backend/scripts/check-secrets.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.2"
+  }
+}

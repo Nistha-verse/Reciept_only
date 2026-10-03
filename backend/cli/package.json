@@ -1,0 +1,9 @@
+{
+  "name": "@receipts-only/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": { "receipts-only": "dist/index.js" },
+  "scripts": { "build": "tsc", "typecheck": "tsc --noEmit" },
+  "dependencies": { "@receipts-only/sdk": "0.1.0" }
+}
