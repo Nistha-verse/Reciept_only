@@ -1,4 +1,4 @@
-# Private material, generated files, history, and the out-of-scope frontend.
+# Private material, generated files, and historical notes.
 samples/
 .env*
 node_modules/
@@ -8,6 +8,8 @@ node_modules/
 **/dist/
 coverage/
 .dkim-cache/
-frontend/
+frontend/playwright-report/
+frontend/test-results/
+frontend/reports/
 docs/ZKEMAIL_NOTES.md
 package-lock.json

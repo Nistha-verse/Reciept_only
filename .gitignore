@@ -15,3 +15,7 @@ coverage/
 .dkim-cache/
 backend/.local-deployment.json
 backend/.merchant-registry.json
+frontend/playwright-report/
+frontend/test-results/
+frontend/reports/
+.superdesign/tmp/
