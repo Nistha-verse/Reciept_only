@@ -79,6 +79,10 @@ Run deployment once and inspect a printed transaction before retrying any failed
 deployment. Public metadata is stored in `backend/deployments.json`; local-node
 metadata is separate and ignored. Release results are in [PROGRESS](docs/PROGRESS.md).
 
+## DEPLOYED CONTRACT ADDRESS
+Deployed Base Sepolia contract (source verified on Basescan):
+[0xd5590616ba215de3c973d8cbc31ec4f35cc1f4d9](https://sepolia.basescan.org/address/0xd5590616ba215de3c973d8cbc31ec4f35cc1f4d9).
+
 ## What is real versus Stage 2
 
 - **Implemented and locally tested:** Solidity validation/replay state/events;
