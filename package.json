@@ -2,15 +2,36 @@
   "name": "receipts-only",
   "private": true,
   "type": "module",
-  "workspaces": ["backend/sdk", "backend/cli"],
+  "workspaces": [
+    "backend/contracts",
+    "backend/sdk",
+    "backend/cli",
+    "backend/api"
+  ],
   "scripts": {
     "check:secrets": "tsx backend/scripts/check-secrets.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint backend",
+    "test:contracts": "npm test -w @receipts-only/contracts",
+    "test:sdk": "npm test -w @receipts-only/sdk",
+    "test:api": "npm test -w @receipts-only/api",
+    "compile": "npm run compile -w @receipts-only/contracts && npm run sync-abi",
+    "sync-abi": "tsx backend/scripts/sync-abi.ts",
+    "cli": "tsx backend/cli/src/index.ts",
+    "bridge": "tsx backend/api/src/server.ts",
+    "test:local": "tsx backend/scripts/local-flow.ts",
+    "deploy": "tsx backend/contracts/scripts/deploy.ts",
+    "sanity": "tsx backend/contracts/scripts/postDeploySanity.ts"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.0.0",
+    "typescript-eslint": "^8.0.0",
+    "prettier-plugin-solidity": "^1.4.3"
   }
 }

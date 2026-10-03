@@ -1,0 +1,13 @@
+# Private material, generated files, history, and the out-of-scope frontend.
+samples/
+.env*
+node_modules/
+**/artifacts/
+**/cache/
+**/typechain-types/
+**/dist/
+coverage/
+.dkim-cache/
+frontend/
+docs/ZKEMAIL_NOTES.md
+package-lock.json

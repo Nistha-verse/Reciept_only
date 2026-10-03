@@ -1,0 +1,17 @@
+{
+  "name": "@receipts-only/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "typecheck": "tsc --noEmit",
+    "node": "hardhat node --hostname 127.0.0.1"
+  },
+  "devDependencies": {
+    "hardhat": "2.28.6",
+    "@nomicfoundation/hardhat-toolbox": "6.0.0",
+    "solc": "0.8.24",
+    "ts-node": "^10.9.2"
+  }
+}
