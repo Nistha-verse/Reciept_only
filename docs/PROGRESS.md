@@ -2,6 +2,30 @@
 
 ## Current run — Stage 1 (2026-10-03)
 
+### Phase 1–2 evidence (resumed run)
+
+- npm workspace reconciliation passed typechecking for all four packages.
+- Pinned Hardhat 2.28.6/toolbox 6.0.0 and solc-js 0.8.24; compilation uses the
+  installed compiler, optimizer 200, Paris EVM. Foundry is not required.
+- Installed mailauth 7.1.0 for local DKIM and Fastify 5.12.5 for the bridge.
+- npm emitted transitive deprecation and install-script-policy warnings; install
+  succeeded. Required Hardhat binaries worked without overriding that policy.
+- `npm run test:contracts`: **17 passing**, including 200 random valid posts and
+  per-post aggregate checks. Compiler output: `Compiled 1 Solidity file successfully`.
+- Measured local gas: deployment **399314**; first merchant, one-byte text
+  **161339**; existing merchant, 280 ASCII bytes **133691**; existing merchant,
+  1120 UTF-8 bytes **154149**. These are different state scenarios, not a text-only
+  comparison. Base Sepolia measurements remain pending.
+- `command -v slither` returned no executable. Manual review: no external calls
+  or interaction/reentrancy path; checked uint128 sums/counts revert atomically
+  at unreachable practical bounds; timestamp narrowing is safe until year-scale
+  uint64 exhaustion; input length caps bound per-call work; no unbounded storage
+  iteration; event fields and text hash derive from identical calldata. No admin,
+  ownership, upgrade, payable, delegatecall, or destruction mechanism exists.
+  Mempool nullifier theft/front-running and arbitrary direct-call nullifiers are
+  real Stage 1 limitations. The contract byte limit does not enforce 280 Unicode
+  codepoints; that is an SDK rule.
+
 **Status: resumed; Phase 0 environment check passed. Implementation in progress.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.
