@@ -1,1 +1,2 @@
-// List merchant counts and averages; implemented in Phase 8.
+// List visible merchant names with on-chain aggregate statistics.
+export { getMerchantSummary as merchants } from "../../../sdk/src/reviews/reader.js";

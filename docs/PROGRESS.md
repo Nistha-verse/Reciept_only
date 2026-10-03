@@ -59,6 +59,19 @@
 - Mocked range-shrinking/deduplication/smoke filtering and every custom error
   selector passed. Separate send-uncertainty tests are included for the next run.
 
+### Phase 5 evidence
+
+- SDK suite now **34 passed, one skipped**, including send-once and confirmation
+  timeout tests. No send is retried automatically.
+- CLI implements doctor, verify, post, read, merchants, inbox, demo-seed; flags
+  include `--json`, `--offline`, `--local`, and explicit `post --demo`.
+- CLI typecheck passed. `npm run test:local` started a quiet localhost Hardhat
+  node, deployed, and passed **8 expected CLI outcomes**: doctor, signed synthetic
+  verify/post/read/merchant stats, ALREADY_USED, TAMPERED, and salted demo reuse.
+- Synthetic files were generated in an OS temp directory and deleted afterward.
+  No real email content was displayed. Inbox sender metadata is domain-only;
+  subjects are returned only by the explicit local inbox interface.
+
 **Status: resumed; Phase 0 environment check passed. Implementation in progress.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.
