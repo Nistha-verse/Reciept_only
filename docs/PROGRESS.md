@@ -39,3 +39,15 @@ forge --version
 ```
 
 The scaffold does not run Solidity tests yet because Phase 0 contains no contract implementation and the required compiler tool is unavailable.
+
+## Phase 1 — zk-email spike
+
+- Status: blocked; research completed, proof generation not completed.
+- Installed official package: `@zk-email/sdk@2.0.11`.
+- Official sample downloaded locally to ignored `samples/official-residency.eml` (7,485 bytes); contents were never printed or committed.
+- Confirmed from current docs and installed SDK that external inputs are supported by the Blueprint SDK API.
+- Local browser proving was selected. Remote proving was not used because it violates the product privacy constraint.
+- Blocking evidence: official `conductor.zk.email` blueprint lookup returned HTTP 500 (`{"error":"Internal server error"}`) for the documented residency slug and the documented Luma blueprint; no circuit assets or verifier metadata were available.
+- No browser runtime is installed in WSL, so the SDK's browser Worker/WASM local prover could not be executed after the registry failure.
+- No official Zomato blueprint was found. The exact Zomato signal layout and verifier inputs remain unknown and must not be guessed.
+- Full details: [`docs/ZKEMAIL_NOTES.md`](ZKEMAIL_NOTES.md).
