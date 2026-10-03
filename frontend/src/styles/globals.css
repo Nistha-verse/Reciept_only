@@ -7,7 +7,7 @@
   --bg: Canvas;
   --surface: Canvas;
   --surface-2: color-mix(in srgb, CanvasText 4%, Canvas);
-  --border: color-mix(in srgb, CanvasText 22%, Canvas);
+  --border: color-mix(in srgb, CanvasText 44%, Canvas);
   --text: CanvasText;
   --text-muted: color-mix(in srgb, CanvasText 68%, Canvas);
   --primary: CanvasText;
@@ -348,8 +348,10 @@ main {
   display: block;
 }
 .hero .outline-word {
-  color: var(--bg);
-  -webkit-text-stroke: 1.6px var(--text);
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: .045em;
+  text-underline-offset: .12em;
 }
 .hero-actions {
   margin: 32px 0 21px;

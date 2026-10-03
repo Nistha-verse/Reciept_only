@@ -213,8 +213,9 @@ export function ReceiptInput({
             <fieldset className="stack !gap-3">
               <legend className="sr-only">Choose a local receipt</legend>
               {inbox.data.map((item) => (
-                <label key={item.id} className="inbox-choice">
+                <label key={item.id} className="inbox-choice" htmlFor={`receipt-${item.id}`} aria-label={`Receipt from ${item.sender}`}>
                   <input
+                    id={`receipt-${item.id}`}
                     type="radio"
                     name="inbox"
                     checked={source?.inboxId === item.id}

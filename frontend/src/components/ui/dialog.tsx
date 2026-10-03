@@ -8,14 +8,16 @@ export function Modal({
   title,
   description,
   children,
+  defaultOpen = false,
 }: {
   trigger: ReactNode;
   title: string;
   description: string;
   children: ReactNode;
+  defaultOpen?: boolean;
 }) {
   return (
-    <Dialog.Root>
+    <Dialog.Root defaultOpen={defaultOpen}>
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
