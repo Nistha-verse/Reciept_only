@@ -85,6 +85,15 @@
 - Removed deprecated Fastify `disableRequestLogging` option after its warning;
   `logger: false` disables logging entirely, including bodies and request lines.
 
+### Phase 7 documentation
+
+README, ARCHITECTURE, SECURITY, API, STAGE2 and DEMO now document the actual local
+flow, exact exported types, endpoint/error contracts, key/cache trust, direct-call
+bypass, front-running, wallet linkability and permanent text. Stage 2 signal
+indices are labeled a proposed future spec, not an implemented verifier ABI.
+Order-template semantics and merchant extraction are explicitly unvalidated;
+the non-Zomato sample is not presented as a real purchase. Release evidence follows.
+
 **Status: resumed; Phase 0 environment check passed. Implementation in progress.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.
