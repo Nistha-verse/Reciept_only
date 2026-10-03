@@ -1,5 +1,135 @@
 # Progress
 
+## Current run — Stage 1 (2026-10-03)
+
+**Status: HARD BLOCKER at Phase 0, step 5: root `.env` is absent.**
+Both `BASE_SEPOLIA_RPC_URL` and `DEPLOYER_PRIVATE_KEY` are unavailable. No deployer
+address, chain ID, balance, deployment, or feature test result can be claimed.
+Resume at Phase 0 step 5, then implement Phases 1–9 in order. Earlier sections
+below describe the previous zk-email investigation only.
+
+### Phase 0 completed work
+
+- Inspected the clean starting tree, all three existing commits, every existing
+  contract/SDK/CLI module, manifests, scripts, and historical notes.
+- Wrote `docs/INSPECTION.md` with a keep/rewrite/remove inventory.
+- Removed comment-only Foundry/proof/sandbox/Gmail placeholders and the unused
+  `@zk-email/sdk` dependency. Preserved `docs/ZKEMAIL_NOTES.md` unchanged.
+- Strengthened `.gitignore`, replaced environment examples with Stage 1
+  placeholders, and strengthened the tracked-secret checker without logging
+  matched contents. Its 32-byte-literal rule is deliberately conservative.
+- Replaced inaccurate README claims and recorded the central direct-call bypass
+  and wallet-linkability limitations in preliminary `docs/SECURITY.md`.
+- Preserved `frontend/` and all `samples/` contents unchanged.
+- Inspected one ignored email structurally: signing/From domain `succinct.xyz`,
+  selector `google`, algorithm `rsa-sha256`, no `l=`, with Subject/Date/Message-ID
+  signed. It is not a Zomato receipt. Merchant-template checks did not match;
+  no production merchant pattern is validated.
+
+### Actual command evidence
+
+```text
+node -v
+v24.10.0
+npm -v
+11.19.1
+git --version
+git version 2.43.0
+
+npm install --ignore-scripts
+removed 159 packages, and changed 1 package in 2s
+
+npm install
+changed 1 package in 308ms
+
+npm run typecheck --workspace @receipts-only/sdk
+tsc --noEmit
+[exit 0]
+
+npm run typecheck --workspace @receipts-only/cli
+tsc --noEmit
+[exit 0]
+
+git check-ignore samples/official-residency.eml .env .env.local .dkim-cache/keys.json
+samples/official-residency.eml
+.env
+.env.local
+.dkim-cache/keys.json
+
+git diff --check
+[no output; exit 0]
+
+npm run check:secrets
+Secret tracking check passed: 59 tracked paths; no email files, environment secrets, or private-key patterns.
+
+npx prettier --check backend/scripts/check-secrets.ts README.md docs/INSPECTION.md docs/SECURITY.md docs/PROGRESS.md backend/sdk/package.json
+Checking formatting...
+All matched files use Prettier code style!
+
+git ls-files | grep -E "\.eml$|\.env$"
+[no output; grep exit 1 means no matches]
+
+git diff --cached --name-only -- frontend docs/ZKEMAIL_NOTES.md samples
+[no output; exit 0]
+
+read-only local audit
+Local .eml count: 1
+HARD BLOCKER: .env is absent; BASE_SEPOLIA_RPC_URL and DEPLOYER_PRIVATE_KEY are unavailable. Address, chain ID, and balance cannot be checked.
+[exit 2]
+```
+
+The audit script was temporary tooling outside the repository. It did not alter
+or transmit sample files. It did not perform DKIM verification.
+
+The first targeted formatting check reported `Code style issues found in 2
+files` (`docs/INSPECTION.md` and `docs/PROGRESS.md`). The cause was unaligned
+Markdown tables; converting the inventories to lists fixed it, and the rerun
+passed. This was a targeted Phase 0 check, not Phase 9 final verification.
+
+`npm install` warned that `esbuild@0.28.2` and `esbuild@0.27.7` install scripts are
+not covered by this environment's npm `allowScripts` policy. Installation and the
+two scaffold typechecks succeeded. No policy override was made; later build
+phases must check whether any required binary setup is affected.
+
+### Dependency choices
+
+- **TypeScript, tsx — retained:** Strict types and local TypeScript scripts.
+- **viem — retained:** Typed Base Sepolia clients, ABI codecs, hashing, transaction simulation.
+- **zod — retained:** Runtime validation of environment and API inputs.
+- **Vitest — retained:** SDK/API unit and integration tests with injected clocks/resolvers.
+- **tsup — retained:** SDK package bundling and declarations.
+- **Prettier — retained:** Reproducible source formatting.
+- **Hardhat + toolbox — planned for Phase 1:** Solidity compilation/testing and deployment without Foundry; select compatible versions together.
+- **mailauth — planned for Phase 3:** Local DKIM cryptographic verification with injectable DNS.
+- **Fastify — planned for Phase 6:** Localhost HTTP server, request injection testing, and body limits.
+- **Small redacting logger — planned for Phase 4:** Explicit allowlisted output without raw emails or credentials.
+- **`@zk-email/sdk` — removed:** No proof generation in Stage 1; historical research is preserved.
+
+### Resume instructions
+
+From the repository root:
+
+```sh
+cp -n .env.example .env
+chmod 600 .env
+nano .env
+```
+
+Set `BASE_SEPOLIA_RPC_URL` and `DEPLOYER_PRIVATE_KEY` in that local file. Do not put
+the key or RPC URL in chat or shell command arguments. The key must be a valid
+nonzero secp256k1 private key, encoded as `0x` followed by 64 hexadecimal
+characters. The RPC must return chain ID `84532`.
+
+Resume message: **"Resume Receipts Only at Phase 0 step 5; `.env` is ready. Follow
+`docs/PROGRESS.md` and complete Phases 1–9 with the original requirements."**
+
+On resumption, derive the address and inspect balance without displaying secrets.
+If the balance is zero, proceed through non-deploy phases before the specified
+three-minute Phase 8 funding poll. No balance or faucet blocker was established
+in this run.
+
+---
+
 ## Phase 0 — Preflight, project creation, and scaffold
 
 - Status: complete with Foundry installation environment blocker recorded

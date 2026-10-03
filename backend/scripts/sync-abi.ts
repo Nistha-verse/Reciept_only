@@ -1,1 +1,1 @@
-// Copy generated Foundry ABIs into the SDK; implemented in Phase 6.
+// Copy the compiled Hardhat ABI into the SDK; implementation pending Stage 1 Phase 4.

@@ -1,1 +1,1 @@
-// Seed sandbox reviews from local samples; implemented in Phase 8.
+// Verify local samples and seed Stage 1 demo reviews; implementation pending Phase 5.

@@ -1,9 +1,15 @@
 samples/*
 !samples/.gitkeep
 .env
+.env.*
+!.env.example
 node_modules/
+artifacts/
 out/
 cache/
 broadcast/
+typechain-types/
 dist/
 coverage/
+*.log
+.dkim-cache/
