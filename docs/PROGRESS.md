@@ -26,6 +26,22 @@
   real Stage 1 limitations. The contract byte limit does not enforce 280 Unicode
   codepoints; that is an SDK rule.
 
+### Phase 3 evidence
+
+- Real mailauth signature verification with strict mode and injected DNS: **20
+  tests passed, one real-sample test skipped by default**. Generated 2048-bit RSA
+  fixtures cover body/header tampering, sender alignment, missing signed headers,
+  body-length tags, weak RSA, duplicate headers, freshness, and LF paste handling.
+- File byte buffers are never normalized; pasted strings only replace bare LF
+  with CRLF. Header unfolding affects a parsing view, never cryptographic input.
+- Only the matching passing signature supplies policy fields; no cross-signature
+  policy mixing. Duplicate From/Subject/Date/Message-ID headers fail closed.
+- Online DKIM keys are cached locally for 24h; explicit offline reuse can be stale.
+  The one local sample is unsupported and no real Zomato merchant rule exists;
+  fallback remains `Zomato order` with the required unvalidated-template marker.
+- First SDK typecheck reported `TS2322` on `Object.fromEntries` returning unknown
+  cache values. The cache's validated entries now receive an explicit Cache type.
+
 **Status: resumed; Phase 0 environment check passed. Implementation in progress.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.
