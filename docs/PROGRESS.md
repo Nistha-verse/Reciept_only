@@ -2,11 +2,13 @@
 
 ## Current run — Stage 1 (2026-10-03)
 
-**Status: HARD BLOCKER at Phase 0, step 5: root `.env` is absent.**
-Both `BASE_SEPOLIA_RPC_URL` and `DEPLOYER_PRIVATE_KEY` are unavailable. No deployer
-address, chain ID, balance, deployment, or feature test result can be claimed.
-Resume at Phase 0 step 5, then implement Phases 1–9 in order. Earlier sections
-below describe the previous zk-email investigation only.
+**Status: resumed; Phase 0 environment check passed. Implementation in progress.**
+The local key was valid bare hexadecimal. Initial strict prefix validation failed;
+trimming and adding `0x` in memory resolved it without modifying `.env`.
+RPC returned chain ID `84532`. Deployer: `0xacF417A24944A588e22f2bF5EDA211c63D66C9bF`.
+Initial balance: `0.0001` ETH. Restored the deleted placeholder-only `.env.example`.
+No deployment or feature test result is claimed yet. Missing-environment evidence
+below is historical, from the first attempt.
 
 ### Phase 0 completed work
 
