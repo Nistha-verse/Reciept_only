@@ -2,6 +2,10 @@
 
 Inspection date: 2026-10-03. Starting commit: `298838f`.
 
+This is the historical pre-implementation inspection snapshot. Its missing-env
+blocker was resolved on resumption; see `PROGRESS.md` for completed implementation,
+deployment and final verification evidence.
+
 ## Findings
 
 The starting worktree was clean. Its three commits created a scaffold and

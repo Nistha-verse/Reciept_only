@@ -57,10 +57,11 @@ export function createDnsResolver(
       : await resolveTxt(name);
     if (!records.length)
       throw Object.assign(new Error("No key"), { code: "ENODATA" });
-    cache[id] = { records, savedAt: now };
+    // Merge after the await: concurrent lookups must not overwrite each other's keys.
+    const updated = { ...readDnsCache(path), [id]: { records, savedAt: now } };
     mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
     const temporary = `${path}.${process.pid}.tmp`;
-    writeFileSync(temporary, JSON.stringify(cache), { mode: 0o600 });
+    writeFileSync(temporary, JSON.stringify(updated), { mode: 0o600 });
     renameSync(temporary, path);
     return records;
   };

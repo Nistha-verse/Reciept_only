@@ -20,7 +20,7 @@ const forbidden = tracked.filter((file) => {
 // Conservatively flag all literal 32-byte hex values: hashes must be derived in
 // source or explicitly reviewed before narrowing this check in a later phase.
 const secretPattern =
-  /\b0x[0-9a-fA-F]{64}\b|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
+  /\b(?:0x)?[0-9a-fA-F]{64}\b|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
 function hasSecret(file: string, contents: string) {
   // The required public release manifest contains transaction and ABI hashes.
   // No arbitrary source field or environment file receives this exception.

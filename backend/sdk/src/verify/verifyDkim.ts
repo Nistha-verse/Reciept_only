@@ -41,7 +41,15 @@ export async function verifyDkim(
     throw new ReceiptsError("TAMPERED");
   }
   const passing = results.filter((r) => r.status.result === "pass");
-  if (passing.length) return passing;
+  if (passing.length)
+    return passing.map((r) => ({
+      signingDomain: r.signingDomain,
+      algo: r.algo,
+      modulusLength: r.modulusLength,
+      canonBodyLengthLimited: r.canonBodyLengthLimited,
+      signingHeaders: { keys: r.signingHeaders?.keys ?? "" },
+      status: { result: "pass" },
+    }));
   if (unavailable) throw new ReceiptsError("DNS_UNAVAILABLE");
   if (
     missing ||

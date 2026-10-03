@@ -94,7 +94,7 @@ indices are labeled a proposed future spec, not an implemented verifier ABI.
 Order-template semantics and merchant extraction are explicitly unvalidated;
 the non-Zomato sample is not presented as a real purchase. Release evidence follows.
 
-**Status: Phases 0–8 implemented and deployed; Phase 9 final clean verification pending.**
+**Status: Phases 0–9 complete; Base Sepolia deployed and source verified; final checks passed.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.
 RPC returned chain ID `84532`. Deployer: `0xacF417A24944A588e22f2bF5EDA211c63D66C9bF`.
@@ -141,6 +141,160 @@ Missing-environment evidence below is historical, from the first attempt.
   mailauth's actual verified signing-header keys, with a regression test.
 - Full typecheck exposed an ethers BaseContract `.connect()` typing issue in a
   test; using the typed function accessor resolves it without changing runtime.
+
+### Phase 9 clean-state verification (first pass)
+
+Deleted root/workspace node_modules, Hardhat artifacts/cache/generated types and
+SDK dist, then ran from the committed tree:
+
+```text
+npm ci                           added 813 packages in 25s
+npm run typecheck                all four packages + release/tool scripts passed
+npm run lint                     passed
+npm run format:check             All matched files use Prettier code style!
+npm run test:contracts           17 passing; compiled from scratch; gas unchanged
+npm run test:sdk                 35 passed, 1 opt-in test skipped
+npm run test:api                 8 passed
+npm run test:local               CLI SMOKE: 8 expected outcomes passed
+npm run check:secrets            passed: 118 tracked paths
+git status                      nothing to commit, working tree clean
+```
+
+npm still reports deprecated transitive glob/inflight/uuid/lodash.isequal and
+ESLint 9 packages and unapproved optional native install scripts. The clean
+install, compiler, TypeScript executor and required test commands nevertheless
+ran successfully. Versions remain locked; no install policy was overridden.
+
+### Written source self-review
+
+Reviewed every contract/SDK source concern against the Stage 1 trust boundary:
+
+- `contracts/ReceiptsReviews.sol`: exact ordered errors, atomic checked effects,
+  compact records, text/event hash integrity, no interactions/admin/upgrade path.
+  Arbitrary direct-call nullifiers and unbound front-running remain intentional
+  limitations; 1120 bytes is not a contract-level codepoint limit.
+- `contracts/hardhat.config.ts`: pinned local compiler, optimizer/target match
+  release settings; local network only, no wallet credentials in Hardhat output.
+- `contracts/scripts/deploy.ts`: estimate then single deployment send, receipt
+  status checked, public metadata only; never auto-retry an uncertain deployment.
+- `contracts/scripts/exportDeployment.ts`: local/testnet records separate; no
+  credentials. A caller must inspect existing deployment before running a new one.
+- `contracts/scripts/postDeploySanity.ts`: exact runtime and ABI equality, empty
+  initial count, unknown stats; after-smoke mode intentionally permits count > 0.
+- `contracts/scripts/verify.ts`: credentials loaded locally and submitted to the
+  explorer, not logged or put in argv; source and metadata are public. Curl
+  fallback and V2 chain query were actually exercised successfully.
+- `sdk/src/index.ts`: exactly four public functions plus errors and type exports;
+  Node-only implementation, no misleading browser or proof capability.
+- `config/env.ts`: file-only credentials, valid scalar via viem, prefix normalized
+  in memory, failures sanitized. Node package/root discovery is local filesystem.
+- `config/chains.ts`: Base Sepolia and explicit local chain; no silent mainnet.
+- `config/constants.ts`: bounded email/review limits and reserved smoke name.
+- `config/providers.ts`: domain boundaries are explicit; merchant pattern disabled
+  until a real sample is reviewed; adding a provider is config-driven.
+- `types/email.ts`: injectable clock/resolver are trusted local test seams, never
+  user-controlled bridge fields. `types/receipt.ts`: no raw email in the result.
+  `types/review.ts`: bigint quantities, explicit context and demo options.
+- `errors/codes.ts`: stable codes. `messages.ts`: fixed, non-sensitive UI text.
+  `ReceiptsError.ts`: no raw nested cause. `decodeRevert.ts`: bounded nested decode,
+  all seven contract errors tested, unknowns sanitized.
+- `email/normalizeRaw.ts`: only string bare-LF replacement; buffers unchanged.
+  `parseEml.ts`: separate unfolded header view, bounded header/signature count,
+  duplicate security-relevant fields fail closed, no source mutation.
+- `email/extractMetadata.ts`: conservative mailbox and unique Message-ID/date
+  extraction; unusual valid mailbox syntax can be rejected rather than guessed.
+  `extractMerchant.ts`: only configured fixed subject templates, currently safe
+  fallback. `checkFreshness.ts`: inclusive 90-day boundary and strict future check.
+- `verify/verifyDkim.ts`: actual mailauth strict signature verification and safe
+  DNS error mapping. Final review additionally stripped raw selected headers,
+  signatures and public-key payloads from even the internal policy result.
+- `verify/dkimPolicy.ts`: algorithm/key/domain/full-body/actual signed-header
+  coverage. Duplicate-b policy-mixing issue fixed and regression tested.
+- `verify/verifyReceipt.ts`: ordered pipeline, no raw output, policy only on
+  cryptographic passes, no on-chain enforcement claim.
+- `verify/deriveNullifier.ts`: specified packed encoding and Message-ID casing;
+  domain-scoped identifier is intentionally not a review-bound commitment.
+- `verify/dnsCache.ts`: only public TXT records, explicit stale offline trust,
+  bounded online cache lifetime. Final review found concurrent read-before-await
+  writes could discard a second key; merging after the lookup fixes lost entries
+  and has a regression test. File access failure fails verification closed.
+- `chain/client.ts`: wallet material stays in Node and .env; HTTP send retries
+  disabled. `abi.ts`: generated artifact, checked against deployed runtime release.
+  `contract.ts`: shared ABI/address wrapper. `gas.ts`: rounded-up 20% buffer.
+- `chain/simulate.ts`: simulate and estimate are idempotent; account required.
+  `postReview.ts`: validate, chain-check, precheck, simulate, one send, bounded wait,
+  event matching, cache invalidation. TX_PENDING retains the known hash; uncertain
+  sends require manual chain inspection. Explicit demo salt is visibly logged.
+- `reviews/reader.ts`: deployment lower bound, adaptive shrinking, tx/log dedupe,
+  ordering, smoke hiding, stats views; latest RPC height cache disabled. RPC
+  indexing lag and reorgs are not a production finality/indexing solution.
+- `reviews/merchants.ts`: only hash-consistent locally learned names; unknown hashes
+  are not guessed. Registry write failure affects display only. `cache.ts`: bounded
+  five-second cache, invalidated by posts; no raw email or credentials stored.
+- `utils/logger.ts`: fixed event names, allowlisted fields, sensitive/unknown fields
+  redacted, no request bodies. `hash.ts`: UTF-8 keccak with specified normalization.
+  `text.ts`: codepoints and byte bounds, whole rating, no empty whitespace review.
+  `retry.ts`: transient idempotent reads only; `assert.ts`: stable errors only.
+
+Review of docs/CLI/bridge additionally confirmed: no runtime AI service, no claims
+of email verification by the contract, no anonymity guarantee, no request logging,
+loopback/Host/origin checks, no forwarded-address trust, no remote email upload,
+schema and size limits, rate limits, no browser key/nullifier input, safe JSON.
+
+### Deviations and scope limits
+
+- Extra supporting files include tooling TypeScript config, local/testnet flow
+  scripts and an ESM marker for release scripts inside the CommonJS Hardhat project.
+  Existing frontend and historical ZKEMAIL_NOTES stayed unchanged.
+- Tests are organized by security module and meaningful integrated behavior;
+  trivial type/config/wrapper files are covered by typechecks and integration,
+  rather than creating one redundant unit-test file for every source module.
+- Real receipt path was unavailable: the sole sample is non-Zomato and its first
+  live DNS check failed. The testnet receipt transaction is explicitly synthetic.
+- Merchant extraction/order-template semantics remain unvalidated and fallback
+  groups accepted Zomato mail under one merchant. This is not hidden as success.
+- The SDK is local Node, not browser DKIM. The bridge is development-only and
+  does not provide authentication against hostile software on the same device.
+- Five-second caching and bounded log pagination are demo-scale; no production
+  reorg indexer, distributed transaction coordinator, moderation or private relayer.
+
+### Final post-review verification
+
+After the internal-result redaction and concurrent-DNS-cache corrections:
+
+```text
+npm run typecheck                passed (all packages and tooling)
+npm run lint                     passed
+npm run format:check             All matched files use Prettier code style!
+npm run test:contracts           17 passing; gas report unchanged
+npm run test:sdk                 38 passed, 1 opt-in test skipped
+npm run test:api                 8 passed
+npm run test:local               CLI SMOKE: 8 expected outcomes passed
+npm run check:secrets            passed
+npm run build -w @receipts-only/sdk
+                                ESM Build success; DTS Build success
+```
+
+The new tests check internal DKIM-result redaction, concurrent cache entries, and
+actual offline signature verification from a previously cached synthetic public key.
+
+Additional read-only/explicit checks actually run:
+
+- Base Sepolia doctor: chain ID 84532, code present, reviewCount **2**, deployer
+  balance **0.000095679358076605 ETH** at the final check.
+- `cli demo-seed --json`: **posted 0, skipped 1, TAMPERED**. After DNS keys became
+  available, the historical non-Zomato sample failed strict DKIM verification.
+  This code does not prove who altered it or when; no original was modified here.
+- `RUN_REAL_SAMPLES=1 npm test -w @receipts-only/sdk -- tests/realSamples.test.ts`:
+  **1 classification test passed**, reporting TAMPERED only. This is explicitly
+  not a successful real-email authenticity test.
+- Post-smoke sanity: runtime and ABI still match, count 2, random stats zero.
+- Follow-up source verification: **ALREADY_VERIFIED / VERIFIED**. Flattened
+  single-file source regenerated under ignored Hardhat artifacts after clean build.
+- `git ls-files | grep -E "\.eml$|\.env$"`: no matches (grep exit 1).
+- Diff from the prior handoff for `frontend/` and `docs/ZKEMAIL_NOTES.md`: empty.
+- No pushes were performed. Final phase commit contains the written source review
+  and corrections; repository cleanliness is checked after committing.
 
 ### Phase 0 completed work
 
