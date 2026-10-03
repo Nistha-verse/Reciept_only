@@ -1,1 +1,16 @@
-{}
+{
+  "84532": {
+    "chainId": 84532,
+    "address": "0xd5590616ba215de3c973d8cbc31ec4f35cc1f4d9",
+    "deployer": "0xacF417A24944A588e22f2bF5EDA211c63D66C9bF",
+    "txHash": "0xdc3e4b6b45e4fd2303ba265da36fab99650584851cf0d88588af299698fbb125",
+    "blockNumber": "47627081",
+    "compilerVersion": "0.8.24+commit.e11b9ed9",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "abiHash": "0xc0e87ab05816cd910dc780d4c588b113fbb53e094adc465cb46eaebd09f0498e",
+    "deployedAt": "2026-10-03T10:14:09.283Z"
+  }
+}

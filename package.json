@@ -12,7 +12,7 @@
     "check:secrets": "tsx backend/scripts/check-secrets.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc --noEmit -p tsconfig.tools.json",
     "lint": "eslint backend",
     "test:contracts": "npm test -w @receipts-only/contracts",
     "test:sdk": "npm test -w @receipts-only/sdk",
@@ -23,7 +23,9 @@
     "bridge": "tsx backend/api/src/server.ts",
     "test:local": "tsx backend/scripts/local-flow.ts",
     "deploy": "tsx backend/contracts/scripts/deploy.ts",
-    "sanity": "tsx backend/contracts/scripts/postDeploySanity.ts"
+    "sanity": "tsx backend/contracts/scripts/postDeploySanity.ts",
+    "verify:source": "tsx backend/contracts/scripts/verify.ts",
+    "test:testnet": "tsx backend/scripts/testnet-flow.ts"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

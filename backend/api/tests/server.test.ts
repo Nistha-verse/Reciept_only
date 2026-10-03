@@ -56,14 +56,12 @@ it("returns allowed CORS preflight and rejects unwanted headers", async () => {
 });
 it("verifies raw/source-ID input, posts after verification, and hides nullifier/key/raw fields", async () => {
   const f = await synthetic();
-  const post = vi
-    .fn()
-    .mockResolvedValue({
-      reviewId: 1n,
-      txHash: hashText("test transaction"),
-      blockNumber: 5n,
-      explorerUrl: "local:test",
-    });
+  const post = vi.fn().mockResolvedValue({
+    reviewId: 1n,
+    txHash: hashText("test transaction"),
+    blockNumber: 5n,
+    explorerUrl: "local:test",
+  });
   const app = createApp({
     verifyOptions: { resolver: f.resolver, now: () => NOW },
     source: () => f.raw,

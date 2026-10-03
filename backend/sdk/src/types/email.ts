@@ -11,6 +11,7 @@ export interface ParsedEmail {
   headers: Map<string, string[]>;
 }
 export interface DkimResult {
+  signingHeaders?: { keys: string };
   signingDomain?: string;
   signature?: string;
   algo?: string;

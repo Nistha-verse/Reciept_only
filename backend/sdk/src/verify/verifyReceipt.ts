@@ -33,7 +33,7 @@ export async function verifyReceipt(
   for (const result of results) {
     let provider;
     try {
-      provider = dkimPolicy(result, email, metadata.fromDomain);
+      provider = dkimPolicy(result, metadata.fromDomain);
     } catch (error) {
       if (error instanceof ReceiptsError) {
         if (failure.code === "UNSUPPORTED_SENDER") failure = error;

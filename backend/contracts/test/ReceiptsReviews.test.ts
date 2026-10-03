@@ -91,7 +91,12 @@ describe("ReceiptsReviews", () => {
       "NullifierAlreadyUsed",
     );
     await expect(
-      c.connect(second).postReview(n, ethers.id("other"), 5, "again"),
+      c.connect(second).getFunction("postReview")(
+        n,
+        ethers.id("other"),
+        5,
+        "again",
+      ),
     ).to.be.revertedWithCustomError(c, "NullifierAlreadyUsed");
     expect(await c.reviewCount()).to.equal(1);
   });

@@ -14,6 +14,10 @@ This is not an anonymity or zero-knowledge implementation. See
 
 ## Quickstart
 
+Deployed Base Sepolia contract (source verified on Basescan):
+[0xd5590616ba215de3c973d8cbc31ec4f35cc1f4d9](https://sepolia.basescan.org/address/0xd5590616ba215de3c973d8cbc31ec4f35cc1f4d9).
+See [PROGRESS](docs/PROGRESS.md) for deployment, smoke and synthetic-receipt transactions.
+
 Use Node 22+ (tested with 24.10.0), npm, and a throwaway Base Sepolia wallet.
 Foundry, a browser prover, and a remote email service are not required.
 

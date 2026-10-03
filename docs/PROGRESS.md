@@ -94,13 +94,53 @@ indices are labeled a proposed future spec, not an implemented verifier ABI.
 Order-template semantics and merchant extraction are explicitly unvalidated;
 the non-Zomato sample is not presented as a real purchase. Release evidence follows.
 
-**Status: resumed; Phase 0 environment check passed. Implementation in progress.**
+**Status: Phases 0–8 implemented and deployed; Phase 9 final clean verification pending.**
 The local key was valid bare hexadecimal. Initial strict prefix validation failed;
 trimming and adding `0x` in memory resolved it without modifying `.env`.
 RPC returned chain ID `84532`. Deployer: `0xacF417A24944A588e22f2bF5EDA211c63D66C9bF`.
 Initial balance: `0.0001` ETH. Restored the deleted placeholder-only `.env.example`.
-No deployment or feature test result is claimed yet. Missing-environment evidence
-below is historical, from the first attempt.
+Missing-environment evidence below is historical, from the first attempt.
+
+### Phase 8 Base Sepolia release evidence
+
+- Re-ran contract suite before deploy: **17 passing**. Rechecked chain ID 84532
+  and balance 0.0001 ETH. No zero-balance polling was necessary.
+- Deployment dry-run: buffered 484380 gas, estimated execution fee 0.00000290628
+  ETH, explicitly excluding variable L1 data fees.
+- Contract: <https://sepolia.basescan.org/address/0xd5590616ba215de3c973d8cbc31ec4f35cc1f4d9>
+- Deploy: <https://sepolia.basescan.org/tx/0xdc3e4b6b45e4fd2303ba265da36fab99650584851cf0d88588af299698fbb125>
+  at block 47627081, actual gas **399314**. Public reproducibility metadata is in
+  `backend/deployments.json`.
+- Sanity output: runtime matches artifact, SDK ABI matches, five ABI selectors
+  present, reviewCount=0, random merchant stats=(0,0).
+- Source verification: **VERIFIED on Basescan**. Initial Node fetch timed out
+  (`ETIMEDOUT`); curl via stdin succeeded as a second transport. Initial V2 POST
+  parameters were rejected; moving `chainid=84532` into the query resolved the
+  API requirement. The script submitted standard compiler JSON and polled success.
+  Credentials were never printed or placed in process arguments.
+- SDK ABI re-synchronized; **34 SDK tests passed, one opt-in test skipped** then.
+- Exactly one smoke review:
+  <https://sepolia.basescan.org/tx/0x7808bbdf9edf2b1df4c28ff5da24f1cf071036c524406d245a14580572a201d4>
+  block 47627102, gas **161519**. Its first immediate reader visibility assertion
+  failed. A later read-only diagnostic found reviewCount=1 and the exact event,
+  confirming RPC/indexing visibility lag; default visible count was zero. The
+  release flow now polls reads and reuses the existing smoke event, never sends
+  another smoke review. Readback and default hiding passed.
+- `cli doctor` passed on Base Sepolia with public address, deployed code,
+  reviewCount=1, balance 0.000096560553399187 ETH at that point.
+- The only real sample's lookup returned DNS_UNAVAILABLE; structural inspection
+  already established it is not Zomato. No real-purchase verification is claimed.
+- Explicit **synthetic signed receipt fallback**, using a generated RSA key and
+  injected DNS, posted:
+  <https://sepolia.basescan.org/tx/0x3111abdbb7ffa5a8392db3488d672ee4b291a008cac9087ea683ac1e2ea0159f>
+  block 47627178, gas **145166**. Reader found the event; a repeat post returned
+  ALREADY_USED; a one-character body change in a temporary copy returned TAMPERED.
+  The copy was deleted. This is a real chain transaction, not a real purchase.
+- Review found a potential policy mix-up if an invalid duplicate DKIM header reused
+  the passing signature's `b=` value with a different `h=` list. Policy now uses
+  mailauth's actual verified signing-header keys, with a regression test.
+- Full typecheck exposed an ethers BaseContract `.connect()` typing issue in a
+  test; using the typed function accessor resolves it without changing runtime.
 
 ### Phase 0 completed work
 

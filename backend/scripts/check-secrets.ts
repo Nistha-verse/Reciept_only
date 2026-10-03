@@ -21,6 +21,25 @@ const forbidden = tracked.filter((file) => {
 // source or explicitly reviewed before narrowing this check in a later phase.
 const secretPattern =
   /\b0x[0-9a-fA-F]{64}\b|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
+function hasSecret(file: string, contents: string) {
+  // The required public release manifest contains transaction and ABI hashes.
+  // No arbitrary source field or environment file receives this exception.
+  const publicFields =
+    file === "backend/deployments.json"
+      ? contents.replace(
+          /"(?:txHash|abiHash)"\s*:\s*"0x[0-9a-fA-F]{64}"/g,
+          '"publicHash": "[PUBLIC]"',
+        )
+      : contents;
+  const withoutPublicLinks =
+    file.startsWith("docs/") || file === "README.md"
+      ? publicFields.replace(
+          /https:\/\/sepolia\.basescan\.org\/tx\/0x[0-9a-fA-F]{64}/g,
+          "[PUBLIC_EXPLORER_LINK]",
+        )
+      : publicFields;
+  return secretPattern.test(withoutPublicLinks);
+}
 const suspicious = tracked.filter((file) => {
   if (forbidden.includes(file)) return false;
   // Check both the index (what a commit would contain) and the working copy.
@@ -30,8 +49,8 @@ const suspicious = tracked.filter((file) => {
     stdio: ["ignore", "pipe", "pipe"],
   });
   return (
-    secretPattern.test(staged) ||
-    (existsSync(file) && secretPattern.test(readFileSync(file, "utf8")))
+    hasSecret(file, staged) ||
+    (existsSync(file) && hasSecret(file, readFileSync(file, "utf8")))
   );
 });
 
